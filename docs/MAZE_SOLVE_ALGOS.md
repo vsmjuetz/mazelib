@@ -1,167 +1,195 @@
-# Maze-Solving Algorithms
+# Algorithmen zur Lösung von Labyrinthen
 
-##### Go back to the main [README](../README.md)
+##### Zurück zum Haupt [README](.. /README.md)
 
-Because users are allowed to create and modify mazes in such a great variety of way, the `mazelib` library will only support universal maze-solving algorithms. That is, `mazelib` will not implement any maze-solving algorithm that can't, for instance, solve imperfect mazes (those with loops or more than one solution). Otherwise, the user will have to know internal details about the maze generating / soliving algorithms they use, and if they are compatible.
+Da Benutzer Labyrinthe auf so unterschiedliche Weise erstellen und modifizieren dürfen, unterstützt die `mazelib`-Bibliothek nur universelle Algorithmen zur Lösung von Labyrinthen. Das bedeutet, dass `mazelib` keinen Labyrinth-Lösungsalgorithmus implementiert, der beispielsweise unvollkommene Labyrinthe (die mit Schleifen oder mehr als einer Lösung) nicht lösen kann. Andernfalls muss der Benutzer interne Details über die von ihm verwendeten Labyrinth-Generierungs- / Soliving-Algorithmen kennen und ob sie kompatibel sind.
 
+## Kettenalgorithmus
 
-## Chain Algorithm
+###### Der Algorithmus
 
-###### The Algorithm
+1. Zeichnen Sie eine gerade Linie von Anfang bis Ende, ignorieren Sie die Wände.
 
-1. draw a straight-ish line from start to end, ignore the walls.
-2. Follow the line from start to end.
-    1. If you bump into a wall, you have to go around.
-    2. Send out backtracking robots in the 1 or 2 open directions.
-        1. If the robot can find your new point, continue on.
-        2. If the robot intersects your line at a point that is further down stream, pick up the path there.
-3. repeat step 2 until you are at the end.
-    1. If both robots return to their original location and direction, the maze is unsolvable.
+2. Folgen Sie der Linie von Anfang bis Ende.
 
-###### Optional Parameters
+1. Wenn du gegen eine Wand stößt, musst du herumgehen.
 
-* *Turn*: String ['left', 'right']
- * Do you want to follow the right wall or the left wall? (default 'right')
+2. Senden Sie Backtracking-Roboter in die 1 oder 2 offenen Richtungen.
 
-###### Results
+1. Wenn der Roboter Ihren neuen Punkt finden kann, fahren Sie fort.
 
-* 1 solution
-* not the shortest solution
-* works against imperfect mazes
+2. Wenn der Roboter Ihre Linie an einem Punkt kreuzt, der weiter stromabwärts liegt, nehmen Sie den Weg dort auf.
 
-###### Notes
+3. Wiederholen Sie Schritt 2, bis Sie am Ende sind.
 
-The idea here is that you break the maze up into a sequence of smaller mazes. There are undoubtedly cases where this helps and cases where this is a terrible idea. Caveat emptor.
+1. Wenn beide Roboter zu ihrem ursprünglichen Standort und ihrer ursprünglichen Richtung zurückkehren, ist das Labyrinth unlösbar.
 
-This algorithm uses the Wall Follower algorithm to solve the sub-mazes. As such, it is significantly more complicated and memory-intensive than your standard Wall Follower.
+###### Optionale Parameter
 
+* *Drehen*: Zeichenfolge ['links', 'rechts']
 
-## Collision Solver
+* Möchten Sie der rechten Wand oder der linken Wand folgen? (Standard 'rechts')
 
-###### The Algorithm
+###### Ergebnisse
 
-1. step through the maze, flooding all directions equally
-2. if two flood paths meet, create a wall where they meet
-3. fill in all dead ends
-4. repeat until there are no more collisions
+* 1 Lösung
 
-###### Results
+* Nicht die kürzeste Lösung
 
-* finds shortests solutions
-* doesn't always work against imperfect mazes
+* Wirkt gegen unvollkommene Labyrinthe
 
-###### Notes
+###### Notizen
 
-On a perfect maze, this is little different than the Dead End Filler algorithm. But in heavily braided and imperfect mazes, this algorithm simply iterates over the whole maze a few more times and finds the optimal solutions. It is quite elegant.
+Die Idee hier ist, dass Sie das Labyrinth in eine Abfolge kleinerer Labyrinthe aufteilen. Es gibt zweifellos Fälle, in denen dies hilft, und Fälle, in denen dies eine schreckliche Idee ist. Verhindert Emptor.
 
+Dieser Algorithmus verwendet den Wall Follower-Algorithmus, um die Sub-Mainths zu lösen. Daher ist es deutlich komplizierter und speicherintensiver als Ihr Standard-WallFollower.
 
+## Kollisionslöser
 
-## Random Mouse
+###### Der Algorithmus
 
-###### The Algorithm:
+1. Schritt durch das Labyrinth und überflutet alle Richtungen gleichermaßen
 
-A mouse just wanders randomly around the maze until it finds the cheese.
+2. Wenn sich zwei Überschwemmungspfade treffen, bilden Sie eine Mauer, an der sie sich treffen
 
-###### Results
+3. Füllen Sie alle Sackgassen auf
 
-* 1 solution
-* not the shortest solution
-* works against imperfect mazes
+4. Wiederholen, bis es keine Kollisionen mehr gibt
 
-###### Notes
+###### Ergebnisse
 
-Random mouse may never finish. Technically. It is certainly inefficient in time, but very efficient in memory.
+* Findet die kürzesten Lösungen
 
-I highly recommend that this solver run in the default pruning mode, to get rid of all unnecessary branches, and backtracks, in the solution.
+* Funktioniert nicht immer gegen unvollkommene Labyrinthe
 
+###### Notizen
 
-## Recursive Backtracker
+In einem perfekten Labyrinth unterscheidet sich dies kaum vom Dead End Filler-Algorithmus. Aber in stark geflochtenen und unvollkommenen Labyrinthen durchsucht dieser Algorithmus einfach noch ein paar Mal das gesamte Labyrinth und findet die optimalen Lösungen. Es ist ziemlich elegant.
 
-###### The Algorithm:
+## Zufällige Maus
 
-1) Pick a random direction and follow it
-2) Backtrack if and only if you hit a dead end.
+###### Der Algorithmus:
 
-###### Results
+Eine Maus wandert einfach zufällig durch das Labyrinth, bis sie den Käse findet.
 
-* 1 solution
-* not the shortest solution
-* works against imperfect mazes
+###### Ergebnisse
 
-###### Notes
+* 1 Lösung
 
-Mathematically, there is very little difference between this algorithm and Random Mouse. The only difference is that at each point, Random Mouse might go right back where it came from. But Backtracker will only do that if it reaches a dead end.
+* Nicht die kürzeste Lösung
 
+* Wirkt gegen unvollkommene Labyrinthe
 
-## Shortest Path Finder
+###### Notizen
 
-###### The Algorithm:
+Eine zufällige Maus wird vielleicht nie fertig. Technisch. Es ist zwar zeitlich ineffizient, aber im Gedächtnis sehr effizient.
 
-1) create a possible solution for each neighbor of the starting position
-2) find the neighbors of the last element in each solution, branches create new solutions
-3) repeat step 2 until you reach the end
-4) The first solution to reach the end wins.
+Ich empfehle dringend, dass dieser Solver im Standardschnittmodus ausgeführt wird, um alle unnötigen Zweige und Backtracks in der Lösung loszuwerden.
 
-###### Results
+## Rekursiver Backtracker
 
-* finds all solutions
-* finds shortest solution(s)
-* works against imperfect mazes
+###### Der Algorithmus:
 
-###### Notes
+1) Wählen Sie eine zufällige Richtung und folgen Sie ir
 
-In CS terms, this is a Breadth-First Search algorithm that is cut short when the first solution is found.
+2) Gehen Sie zurück, wenn und nur wenn Sie eine Sackgasse treffen.
 
+###### Ergebnisse
 
-## Shortest Paths Finder
+* 1 Lösung
 
-###### The Algorithm
+* Nicht die kürzeste Lösung
 
-1) create a possible solution for each neighbor of the starting position
-2) find the neighbors of the last element in each solution, branches create new solutions
-3) repeat step 2 until you al solutions hit dead ends or reach the end
-4) remove all dead end solutions
+* Wirkt gegen unvollkommene Labyrinthe
 
-###### Results
+###### Notizen
 
-* finds all solutions
-* works against imperfect mazes
+Mathematisch gibt es nur sehr wenig Unterschied zwischen diesem Algorithmus und Random Mouse. Der einzige Unterschied besteht darin, dass die zufällige Maus an jedem Punkt dorthin zurückkehren kann, wo sie herkam. Aber Backtracker wird das nur tun, wenn es eine Sackgasse erreicht.
 
-###### Notes
+## Kürzester Pfadfinder
 
-In CS terms, this is a Breadth-First Search algorithm. It finds all unique, non-looped solutions to the maze.
+###### Der Algorithmus:
 
-Though this version is optimized to improve speed, nothing could be done about the fact that this algorithm uses substantially more memory than just the maze grid itself.
+1) Erstellen Sie eine mögliche Lösung für jeden Nachbarn der Startposition
 
+2) finden Sie die Nachbarn des letzten Elements in jeder Lösung, Zweige erstellen neue Lösungen
 
-## Trémaux's Algorithm
+3) Wiederholen Sie Schritt 2, bis Sie das Ende erreichen
 
-###### The Algorithm
+4) Die erste Lösung, die das Ende erreicht, gewinnt.
 
-1) Every time you visit a cell, mark it once.
-2) When you hit a dead end, turn around and go back.
-3) When you hit a junction you haven't visited, pick a new passage at random.
-4) If you're walking down a new passage and hit a junction you have visited, treat it like a dead end and go back.
-5) If walking down a passage you have visited before (i.e. marked once) and you hit a junction, take any new passage available, otherwise take an old passage (i.e. marked once).
-6) When you finally reach the end, follow cells marked exactly once back to the start.
-7) If the Maze has no solution, you'll find yourself at the start with all cells marked twice.
+###### Ergebnisse
 
-###### Results
+* Findet alle Lösungen
 
-* Finds one non-optimal solution.
-* Works against imperfect mazes.
+* Findet die kürzeste(n) Lösung(en)
 
-###### Notes
+* Wirkt gegen unvollkommene Labyrinthe
 
-This Maze-solving method is designed to be used by a human inside the Maze.
+###### Notizen
 
+In CS-Begriffen handelt es sich um einen Broadth-First-Suchalgorithmus, der gekürzt wird, wenn die erste Lösung gefunden wird.
 
-## Vocabulary
+## Kürzeste Pfade Finder
 
-1. __cell__ - an open passage in the maze
-2. __grid__ - the grid is the combination of all passages and barriers in the maze
-3. __perfect__ - a maze is perfect if it has one and only one solution
-4. __wall__ - an impassable barrier in the maze
+###### Der Algorithmus
 
+1) Erstellen Sie eine mögliche Lösung für jeden Nachbarn der Startposition
 
-##### Go back to the main [README](../README.md)
+2) finden Sie die Nachbarn des letzten Elements in jeder Lösung, Zweige erstellen neue Lösungen
+
+3) Wiederholen Sie Schritt 2, bis alle Lösungen in die Sackgassen kommen oder das Ende erreichen
+
+4) Entfernen Sie alle Sackgassenlösungen
+
+###### Ergebnisse
+
+* Findet alle Lösungen
+
+* Wirkt gegen unvollkommene Labyrinthe
+
+###### Notizen
+
+In CS-Begriffen ist dies ein Broadth-First-Suchalgorithmus. Es findet alle einzigartigen, nicht geschleiften Lösungen für das Labyrinth.
+
+Obwohl diese Version optimiert ist, um die Geschwindigkeit zu verbessern, konnte nichts gegen die Tatsache unternommen werden, dass dieser Algorithmus wesentlich mehr Speicher verbraucht als nur das Labyrinthgitter selbst.
+
+## Der Algorithmus von Trémaux
+
+###### Der Algorithmus
+
+1) Jedes Mal, wenn Sie eine Zelle besuchen, markieren Sie sie einmal.
+
+2) Wenn Sie eine Sackgasse erreichen, drehen Sie sich um und gehen Sie zurück.
+
+3) Wenn Sie eine Kreuzung treffen, die Sie noch nicht besucht haben, wählen Sie zufällig eine neue Passage aus.
+
+4) Wenn Sie einen neuen Durchgang hinuntergehen und auf eine Kreuzung treffen, die Sie besucht haben, behandeln Sie sie wie eine Sackgasse und gehen Sie zurück.
+
+5) Wenn Sie eine Passage hinuntergehen, die Sie zuvor besucht haben (d. h. einmal markiert) und Sie auf eine Kreuzung treffen, nehmen Sie einen neuen Durchgang, der verfügbar ist, ansonsten nehmen Sie einen alten Durchgang (d. h. einmal markiert).
+
+6) Wenn Sie endlich das Ende erreichen, folgen Sie den markierten Zellen einmal genau zurück zum Anfang.
+
+7) Wenn das Labyrinth keine Lösung hat, befinden Sie sich am Anfang mit allen Zellen, die zweimal markiert sind.
+
+###### Ergebnisse
+
+* Findet eine nicht optimale Lösung.
+
+* Arbeitet gegen unvollkommene Labyrinthe.
+
+###### Notizen
+
+Diese Methode zur Lösung des Labyrinths soll von einem Menschen im Labyrinth verwendet werden.
+
+## Wortschatz
+
+1. __cell__ - ein offener Durchgang im Labyrinth
+
+2. __grid__ - das Gitter ist die Kombination aller Durchgänge und Barrieren im Labyrinth
+
+3. __perfect__ - ein Labyrinth ist perfekt, wenn es nur eine Lösung hat
+
+4. __wall__ - eine unpassierbare Barriere im Labyrinth
+
+##### Zurück zum Haupt [README](.. /README.md)
